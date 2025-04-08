@@ -1,1 +1,20 @@
-<p>Main page!</p>
+<h1>Main page!</h1>
+<p>User ip address: <%= @user.ip_address %></p>
+<ul>
+  <% @searches.each do |search| %>
+    <li><%= search.search_content %></li>
+  <% end %>
+</ul>
+
+<%= form_with url: root_path, method: :get, data: { turbo_frame: "articles" }, id: "search-form", "data-controller": "search" do %>
+  <%= text_field_tag :query, params[:query], placeholder: "Search articles...", class: "search-input", data: { action: "input->search#submitForm" } %>
+<% end %>
+
+<turbo-frame id="articles">
+  <% @articles.each do |article| %>
+    <div class="article">
+      <h2><%= article.title %></h2>
+      <p><%= article.content %></p>
+    </div>
+  <% end %>
+</turbo-frame>

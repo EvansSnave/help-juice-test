@@ -28,3 +28,26 @@ Search.create!([
     search_content: "Hi"
   },
 ])
+
+Article.create!([
+  {
+    title: "First article",
+    content: "This is the first article"
+  },
+  {
+    title: "Second article",
+    content: "This is the second article"
+  },
+  {
+    title: "Third article",
+    content: "This is the third article"
+  },
+  {
+    title: "Fourth article",
+    content: "This is the fourth article"
+  },
+  {
+    title: "Fifth article",
+    content: "This is the fifth article"
+  },
+])
