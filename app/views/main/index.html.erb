@@ -1,20 +1,27 @@
 <h1>Main page!</h1>
-<p>User ip address: <%= @user.ip_address %></p>
-<ul>
-  <% @searches.each do |search| %>
-    <li><%= search.search_content %></li>
-  <% end %>
-</ul>
+<p>User IP Address: <%= @user.ip_address %></p>
 
-<%= form_with url: root_path, method: :get, data: { turbo_frame: "articles" }, id: "search-form", "data-controller": "search" do %>
-  <%= text_field_tag :query, params[:query], placeholder: "Search articles...", class: "search-input", data: { action: "input->search#submitForm" } %>
-<% end %>
+<input type="text" id="search-input" placeholder="Search articles..." autocomplete="off">
+<ul id="search-results"></ul>
 
-<turbo-frame id="articles">
-  <% @articles.each do |article| %>
-    <div class="article">
-      <h2><%= article.title %></h2>
-      <p><%= article.content %></p>
-    </div>
-  <% end %>
-</turbo-frame>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const searchInput = document.getElementById("search-input");
+    const resultsList = document.getElementById("search-results");
+
+    searchInput.addEventListener("input", function() {
+      const query = searchInput.value.trim();
+      fetch(`/articles.json?search_by_title=${query}`)
+        .then(response => response.json())
+        .then(data => {
+          resultsList.innerHTML = ""; // Clear old results
+          data.forEach(article => {
+            const li = document.createElement("li");
+            li.innerHTML = `<strong>${article.title}</strong><p>${article.content}</p>`;
+            resultsList.appendChild(li);
+          });
+        })
+        .catch(error => console.error("Error fetching articles:", error));
+    });
+  });
+</script>
